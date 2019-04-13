@@ -79,6 +79,17 @@ func Int642String(arg int64) string {
 	return strconv.FormatInt(int64(arg), 10)
 }
 
+func GetBytes(structt interface{}) ([]byte, error) {
+	// https://gist.github.com/miguelmota/5bfa2b6ab88f439fe0da0bfb1faca763
+
+	data, err := json.Marshal(structt)
+
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 /*
   json string convert struct
 */
