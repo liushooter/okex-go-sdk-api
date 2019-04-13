@@ -1,9 +1,11 @@
 package okex
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetAccountCurrencies(t *testing.T) {
@@ -15,6 +17,38 @@ func TestGetAccountCurrencies(t *testing.T) {
 	assert.True(t, err == nil)
 	jstr, _ := Struct2JsonString(ac)
 	println(jstr)
+}
+
+// 币种列表
+func TestOKExCurrencies(t *testing.T) {
+
+	resp, err := NewOKExClient().GetAccountCurrencies()
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	x, err := GetBytes(resp)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	var currencist []Currency
+	err = json.Unmarshal(x, &currencist)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	for _, v := range currencist {
+		fmt.Printf("Name : %v \n", v.Name)
+		fmt.Printf("Currency : %v \n", v.Currency)
+		fmt.Printf("CanWithdraw : %v \n", v.CanWithdraw)
+		fmt.Printf("CanDeposit : %v \n", v.CanDeposit)
+		fmt.Printf("MinWithdrawal : %v \n\n\n\n", v.MinWithdrawal)
+	}
+
 }
 
 func TestGetAccountWallet(t *testing.T) {
